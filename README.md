@@ -1,3 +1,5 @@
-# theta
+# Build with Theta for Swift
 
-A description of this package.
+Theta Swift library.
+
+This package is under active development.
