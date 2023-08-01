@@ -2,4 +2,4 @@
 
 Theta Swift library.
 
-This package is under active developing.
+This package is under active development.
