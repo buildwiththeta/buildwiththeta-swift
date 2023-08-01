@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct FMargins: Decodable {
     let mobile: [Double]
@@ -18,16 +19,16 @@ struct FMargins: Decodable {
         self.desktop = desktop
     }
     
-    func _getSingle(values: [Double]) -> NSEdgeInsets {
-        return NSEdgeInsets(
+    func _getSingle(values: [Double]) -> EdgeInsets {
+        return EdgeInsets(
             top: abs(values[1]),
-            left: abs(values[0]),
+            leading: abs(values[0]),
             bottom: abs(values[3]),
-            right: abs(values[2])
+            trailing: abs(values[2])
         )
     }
     
-    func get(device: DeviceType) -> NSEdgeInsets {
+    func get(device: DeviceType) -> EdgeInsets {
         switch (device) {
             case .mobile:
                 return _getSingle(values: mobile)

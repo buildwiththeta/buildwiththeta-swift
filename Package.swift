@@ -7,7 +7,7 @@ import PackageDescription
 let package = Package(
     name: "Theta",
     platforms: [
-        .iOS(.v13),
+        .iOS(.v16),
         .macCatalyst(.v13),
         .watchOS(.v6),
         .tvOS(.v13),
