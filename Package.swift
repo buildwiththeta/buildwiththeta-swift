@@ -30,6 +30,12 @@ let package = Package(
             dependencies: []),
         .testTarget(
             name: "ThetaTests",
-            dependencies: ["Theta"]),
+            dependencies: ["Theta"],
+            sources: [
+                "ThetaTests.swift",
+                "FMarginsTests.swift",
+                "FSizeTests.swift"
+            ]
+        )
     ]
 )

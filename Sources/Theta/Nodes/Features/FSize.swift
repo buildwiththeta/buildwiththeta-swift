@@ -8,15 +8,15 @@
 import Foundation
 import UIKit
 
-class FSize {
+struct FSize: Decodable {
     let mobile: String
     let tablet: String
     let desktop: String
     
-    init(_mobile: String, _tablet: String, _desktop: String) {
-        mobile = _mobile
-        tablet = _tablet
-        desktop = _desktop
+    init(mobile: String, tablet: String, desktop: String) {
+        self.mobile = mobile
+        self.tablet = tablet
+        self.desktop = desktop
     }
     
     func get(device: DeviceType, isWidth: Bool) -> Double? {
@@ -52,5 +52,11 @@ class FSize {
             return valueDouble
         }
         return 0
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case mobile = "s"
+        case tablet = "t"
+        case desktop = "d"
     }
 }
