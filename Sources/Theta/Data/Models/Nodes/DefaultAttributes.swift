@@ -10,6 +10,6 @@ import SwiftUI
 
 struct AlignAttributes {
     let attributes: [String: Any] = [
-        DBKeys.align: FAlign(alignment: "tL"),
+        DBKeys.align: FAlign(alignment: CAlignment.tL),
     ]
 }
