@@ -30,11 +30,12 @@ let package = Package(
             dependencies: ["SwiftyJSON", "Alamofire"]),
         .testTarget(
             name: "ThetaTests",
-            dependencies: ["Theta"],
+            dependencies: ["Theta", "SwiftyJSON", "Alamofire"],
             sources: [
                 "ThetaTests.swift",
                 "FMarginsTests.swift",
-                "FSizeTests.swift"
+                "FSizeTests.swift",
+                "GetComponentRequest.swift"
             ]
         )
     ]

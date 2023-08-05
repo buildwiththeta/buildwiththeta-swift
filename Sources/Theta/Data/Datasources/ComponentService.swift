@@ -22,12 +22,12 @@ class ComponentService {
     
     func getComponent(componentName: String, branchName: String?, completion: @escaping (Result<GetComponentResponse, Error>) -> Void) {
         let url = "\(AppStrings.baseUrl)\(AppStrings.getComponentPath)"
-        var headers: HTTPHeaders = [
+        let headers: HTTPHeaders = [
             "Authorization": "Bearer \(clientToken.token)",
             "Content-Type": "application/json",
         ]
         
-        var body: [String: Any] = [
+        let body: [String: Any] = [
             "component_name": componentName,
             "branch_name": branchName ?? NSNull(),
             "log": [:],

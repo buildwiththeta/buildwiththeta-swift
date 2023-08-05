@@ -6,27 +6,28 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum FFillType: String, Decodable {
-    case solid
-    case linearGradient
-    case radialGradient
-    case style
-    case image
-    case none
+    case solid = "s"
+    case linearGradient = "l"
+    case radialGradient = "r"
+    case style = "st"
+    case image = "i"
+    case none = "n"
 }
 
 struct FFill: Decodable {
-    let levels: [FFillElement]
-    let type: FFillType
+    let levels: [FFillElement]?
+    let type: FFillType?
     let begin: CAlignment?
     let end: CAlignment?
     let center: CAlignment?
     let radius: Double?
-    let boxFit: FBoxFit?
+    let boxFit: String?
     let paletteStyle: String?
     
-    init(levels: [FFillElement], type: FFillType, begin: CAlignment?, end: CAlignment?, center: CAlignment?, radius: Double?, boxFit: FBoxFit?, paletteStyle: String?) {
+    init(levels: [FFillElement], type: FFillType, begin: CAlignment?, end: CAlignment?, center: CAlignment?, radius: Double?, boxFit: String?, paletteStyle: String?) {
         self.levels = levels
         self.type = type
         self.begin = begin
@@ -35,6 +36,10 @@ struct FFill: Decodable {
         self.radius = radius
         self.boxFit = boxFit
         self.paletteStyle = paletteStyle
+    }
+    
+    func getHexColor() -> Color {
+        return Color(hex: levels?.first?.color ?? "000000")
     }
     
     enum CodingKeys: String, CodingKey {

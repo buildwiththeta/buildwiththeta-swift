@@ -17,18 +17,18 @@ class NodeRendering {
         
         var children: [CNode] = []
         for node in nodes {
-            if node.canHave == .children {
+            if node.canHave() == .children {
                 let children0 = try buildTree(list, parentID: node.id)
-                children.append(try node.copyWith(parentID: parentID, children: children0))
-            } else if node.canHave == .child {
+                children.append( node.copyWith(parentID: parentID, children: children0))
+            } else if node.canHave() == .child {
                 let children0 = try buildTree(list, parentID: node.id)
-                children.append(try node.copyWithoutChild(
+                children.append( node.copyWithoutChild(
                     parentID: parentID, child: children0.isEmpty ? (list.contains(where: { $0.id == children0.first?.id }) ? children0.first : nil) : nil))
             } else {
-                children.append(try node.copyWith(parentID: parentID))
+                children.append( node.copyWith(parentID: parentID))
             }
         }
-        
+        print(children)
         return children
     }
 
@@ -40,7 +40,7 @@ class NodeRendering {
         var nodes = list.filter { $0.pageID == pageID }
         for i in 0..<nodes.count {
             if nodes[i].type == "component" || nodes[i].type == "teamComponent" {
-                nodes[i] = nodes[i].addChildrenToComponent(nodes[i].componentID!, list: list)
+                nodes[i] = nodes[i].addChildrenToComponent(componentID: nodes[i].componentID!, children: list)
             }
         }
         return nodes

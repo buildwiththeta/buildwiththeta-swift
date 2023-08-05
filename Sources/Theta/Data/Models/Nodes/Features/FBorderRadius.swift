@@ -10,8 +10,8 @@ import SwiftUI
 
 struct FBorderRadius: Decodable {
     let mobile: [Double]
-    let tablet: [Double]
-    let desktop: [Double]
+    let tablet: [Double]?
+    let desktop: [Double]?
     
     init(mobile: [Double], tablet: [Double], desktop: [Double]) {
         self.mobile = mobile
