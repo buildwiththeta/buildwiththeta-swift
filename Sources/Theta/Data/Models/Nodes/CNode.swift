@@ -9,7 +9,11 @@ import Foundation
 import SwiftUI
 import SwiftyJSON
 
-class CNode {
+class CNode: Identifiable, Equatable {
+    static func == (lhs: CNode, rhs: CNode) -> Bool {
+        lhs.id == rhs.id
+    }
+    
     var id: String
     var type: String
     var parentID: String?
@@ -80,8 +84,8 @@ class CNode {
         }
     }
     
-    func toView(view: any View) -> any View {
-        return view
+    func getView() -> some View {
+        return EmptyForTestingView()
     }
     
     func copyWith(

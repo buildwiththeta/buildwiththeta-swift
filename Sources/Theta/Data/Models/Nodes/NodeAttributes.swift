@@ -11,7 +11,7 @@ struct NodeAttributes : Decodable {
     let align: FAlign?
     let width: FSize?
     let height: FSize?
-    let boxFit: String?
+    let boxFit: BoxFitEnum?
     let margins: FMargins?
     let padding: FMargins?
     let borderRadius: FBorderRadius?
@@ -23,6 +23,8 @@ struct NodeAttributes : Decodable {
     let visibleOnTablet: Bool?
     let visibleOnLaptop: Bool?
     let visibleOnDesktop: Bool?
+    let mainAxisAlignment: MainAxisAlignment?
+    let crossAxisAlignment: CrossAxisAlignment?
     
     enum CodingKeys: String, CodingKey {
         case align = "al"
@@ -40,5 +42,7 @@ struct NodeAttributes : Decodable {
         case visibleOnTablet = "vOT"
         case visibleOnLaptop = "vOL"
         case visibleOnDesktop = "vOD"
+        case mainAxisAlignment = "mAA"
+        case crossAxisAlignment = "cAA"
     }
 }
