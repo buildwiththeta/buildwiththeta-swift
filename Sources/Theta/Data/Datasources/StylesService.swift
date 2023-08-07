@@ -20,12 +20,12 @@ class StylesService {
     
     func fetch(completion: @escaping (Result<GetStylesResponse, Error>) -> Void) {
         let url = "\(AppStrings.baseUrl)\(AppStrings.getStylesPath)"
-        var headers: HTTPHeaders = [
+        let headers: HTTPHeaders = [
             "Authorization": "Bearer \(clientToken.token)",
             "Content-Type": "application/json",
         ]
         
-        var body: [String: Any] = [
+        let body: [String: Any] = [
             "log": [:],
         ]
         
