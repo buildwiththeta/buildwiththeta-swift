@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftyJSON
+import Swinject
 
 struct GetComponentResponse {
     let componentID: String
@@ -14,9 +15,12 @@ struct GetComponentResponse {
     let conversionEvents: [ConversionEvent]
     let abTestID: String?
     
+    let nodesData: Any
+    
     init(json: JSON) throws {
         let decoder = JSONDecoder()
-        let rendering = NodeRendering()
+        let container = Container()
+        let rendering = container.resolve(NodeRendering.self)!
         
         self.componentID = json["page_id"].string!
         self.abTestID = json["ab_test"].string
@@ -34,8 +38,18 @@ struct GetComponentResponse {
             nodes.append(newNode)
             print("\(newNode.type) \(newNode.attributes)")
         }
+        self.nodesData = nodesData
         
         self.treeNodes = try rendering.renderTree(rendering.renderComponents(nodes, pageID: json["page_id"].string!))
         print(self.treeNodes)
+    }
+    
+    func toJson() -> [String: Any?] {
+        return [
+            "page_id": componentID,
+            "ab_test": abTestID,
+            "conversion_events": conversionEvents.map { $0.toJson() },
+            "nodes": nodesData,
+        ]
     }
 }

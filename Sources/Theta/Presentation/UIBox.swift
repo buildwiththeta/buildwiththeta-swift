@@ -86,7 +86,12 @@ struct LogicBox: View {
 
 struct UIBoxPreview: PreviewProvider {
     static var previews: some View {
-        UIBox(name: "Counter View", branch: "Version 2.0", errorView: { error in
+        let controller = UIBoxController()
+        UIBox(
+            name: "Counter View",
+            branch: "Version 2.0",
+            controller: controller,
+            errorView: { error in
             AnyView(Text("\(error.localizedDescription)"))
         })
     }

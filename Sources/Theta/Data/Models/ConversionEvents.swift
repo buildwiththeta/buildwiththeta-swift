@@ -21,4 +21,14 @@ struct ConversionEvent: Decodable {
         case trigger = "trigger"
         case createdAt = "created_at"
     }
+    
+    func toJson() -> [String: Any] {
+        return [
+            "id": self.id,
+            "node_id": self.nodeID,
+            "project_id": self.projectID,
+            "trigger": self.trigger,
+            "created_at": self.createdAt
+        ]
+    }
 }
