@@ -5,6 +5,7 @@
 //  Created by Andrea Buttarelli on 07/08/23.
 //
 
+/*
 import Foundation
 import Crypto
 
@@ -70,3 +71,4 @@ func decompress(data: Data) -> Data? {
     inflateEnd(&stream)
     return decompressedData as Data
 }
+*/

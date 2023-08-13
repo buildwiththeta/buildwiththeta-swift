@@ -16,8 +16,6 @@ struct UIBox: View {
     let controller: UIBoxController?
     let placeholder: AnyView?
     let errorView: ErrorView
-    let workflows: [Workflow]?
-    let overrides: [Override]?
     
     init(name: String, branch: String? = nil, controller: UIBoxController? = nil, placeholder: AnyView? = nil, errorView: ErrorView) {
         self.name = name
@@ -28,7 +26,7 @@ struct UIBox: View {
     }
     
     var body: some View {
-        LocalNotifier<AnyView>(workflows: workflows, overrides: overrides) {
+        LocalNotifier {
             LogicBox(componentName: name, branch: branch, controller: controller, placeholder: placeholder, errorView: errorView)
         }
     }

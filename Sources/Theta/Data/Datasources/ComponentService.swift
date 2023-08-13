@@ -20,7 +20,7 @@ class ComponentService {
         self.httpClient = httpClient
     }
     
-    func getComponent(componentName: String, branchName: String?, completion: @escaping (Result<GetComponentResponse, Error>) -> Void) {
+    func getComponent(componentName: String, branchName: String?) throws -> GetComponentResponse {
         let url = "\(AppStrings.baseUrl)\(AppStrings.getComponentPath)"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(clientToken.token)",
@@ -33,23 +33,38 @@ class ComponentService {
             "log": [:],
         ]
         
+        let semaphore = DispatchSemaphore(value: 0)
+        var result: Result<GetComponentResponse, Error>!
+        
         httpClient.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers).responseJSON { response in
             switch response.result {
             case .success(let value):
                 do {
                     let getPageResponse = try GetComponentResponse(json: JSON(value))
-                    completion(.success(getPageResponse))
+                    result = .success(getPageResponse)
                 } catch {
-                    completion(.failure(error))
+                    result = .failure(error)
                 }
-            case .failure(let error):
+            case .failure:
                 let message = "Error fetching component, code: \(response.response?.statusCode ?? 0), message: \(response.data)"
-                completion(.failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: message])))
+                result = .failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: message]))
             }
+            semaphore.signal()
+        }
+        
+        semaphore.wait()
+        
+        switch result {
+        case .success(let response):
+            return response
+        case .failure(let error):
+            throw error
+        case .none:
+            throw RuntimeError("none")
         }
     }
     
-    func sendConversionEvent(eventID: String, abTestID: String?, completion: @escaping (Result<Void, Error>) -> Void) {
+    func sendConversionEvent(eventID: String, abTestID: String?) throws {
         let url = "\(AppStrings.baseUrl)\(AppStrings.getComponentPath)"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(clientToken.token)",
@@ -61,14 +76,21 @@ class ComponentService {
             "ab_test_id": abTestID ?? NSNull(),
         ]
         
+        let semaphore = DispatchSemaphore(value: 0)
+        var errorOccurred: Error?
+        
         httpClient.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers).response { response in
-            if response.response?.statusCode == 200 {
-                completion(.success(()))
-            } else {
+            if response.response?.statusCode != 200 {
                 let message = "Error sending a conversion event, code: \(response.response?.statusCode ?? 0), message: \(String(describing: response.data))"
-                completion(.failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: message])))
+                errorOccurred = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: message])
             }
+            semaphore.signal()
+        }
+        
+        semaphore.wait()
+        
+        if let error = errorOccurred {
+            throw error
         }
     }
 }
-

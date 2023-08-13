@@ -8,7 +8,7 @@
 import Foundation
 
 protocol ComponentRepository {
-    func getComponent(componentName: String, preloadAllowed: Bool, branchName: String?) -> Either<Error, GetComponentResponse>
-    func sendConversionEvent(eventID: ID, abTestID: ID?) -> Either<Error, Void>
+    func getComponent(componentName: String, preloadAllowed: Bool, branchName: String?) async throws -> GetComponentResponse
+    func sendConversionEvent(eventID: ID, abTestID: ID?) throws -> Void
 }
 

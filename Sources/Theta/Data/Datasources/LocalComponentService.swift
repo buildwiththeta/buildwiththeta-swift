@@ -5,6 +5,7 @@
 //  Created by Andrea Buttarelli on 07/08/23.
 //
 
+/*
 import Foundation
 import SwiftyJSON
 
@@ -92,3 +93,4 @@ class LocalComponentService {
         throw RuntimeError("Component data corrupted.")
     }
 }
+*/

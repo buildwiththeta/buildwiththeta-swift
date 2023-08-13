@@ -10,8 +10,6 @@ import SwiftUI
 
 struct LocalNotifier<Content: View>: View {
     @EnvironmentObject var treeState: TreeState
-    let workflows: [Workflows]
-    let overrides: [Override]
     @ViewBuilder let content: () -> Content
     
     var body: some View {

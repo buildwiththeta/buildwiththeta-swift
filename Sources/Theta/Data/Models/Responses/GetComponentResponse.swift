@@ -19,8 +19,7 @@ struct GetComponentResponse {
     
     init(json: JSON) throws {
         let decoder = JSONDecoder()
-        let container = Container()
-        let rendering = container.resolve(NodeRendering.self)!
+        let rendering = NodeRendering()
         
         self.componentID = json["page_id"].string!
         self.abTestID = json["ab_test"].string
