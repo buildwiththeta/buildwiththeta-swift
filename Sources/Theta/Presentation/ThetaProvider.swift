@@ -8,6 +8,17 @@
 import Foundation
 import SwiftUI
 
+private struct MainWindowSizeKey: EnvironmentKey {
+    static let defaultValue: CGSize = .zero
+}
+
+extension EnvironmentValues {
+    var mainWindowSize: CGSize {
+        get { self[MainWindowSizeKey.self] }
+        set { self[MainWindowSizeKey.self] = newValue }
+    }
+}
+
 struct ThetaProvider<Content: View>: View {
     var theme: ThemeMode
     @StateObject var treeState: TreeState = TreeState(theme: ThemeMode.light, colorStyles: [], textStyles: [])
@@ -21,7 +32,11 @@ struct ThetaProvider<Content: View>: View {
     }
     
     var body: some View {
-        content.environmentObject(treeState)
+        GeometryReader { proxy in
+            content
+                .environmentObject(treeState)
+                .environment(\.mainWindowSize, proxy.size)
+        }
     }
 }
 

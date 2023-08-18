@@ -1,3 +1,6 @@
+
+import Alamofire
+
 class Theta {
     // A private initializer to prevent direct instantiation
     private init() {}
@@ -8,7 +11,7 @@ class Theta {
     var isInitialized: Bool = false
 
     // Replace with your actual client or service type
-    var client: Any?
+    var client: Client?
 
     // Initialize function, similar to the Dart one
     class func initialize(
@@ -16,12 +19,9 @@ class Theta {
         connectionMode: ConnectionMode = .continuous,
         customPreloadedJson: [String: Any]? = nil,
         cacheExtension: Int = 43200
-    ) await -> Theta {
-        // Call the private initializer
-        shared._init(anonKey: anonKey, cacheExtension: cacheExtension, connectionMode: connectionMode, customPreloadedJson: customPreloadedJson)
-
+    ) async -> Void {
+        await shared._init(anonKey: anonKey, cacheExtension: cacheExtension, connectionMode: connectionMode, customPreloadedJson: customPreloadedJson)
         print("Theta init completed \(shared)")
-        return Future.value(shared) // Just a placeholder; you might want to replace this with your async operation.
     }
 
     private func _init(
@@ -29,18 +29,48 @@ class Theta {
         cacheExtension: Int,
         connectionMode: ConnectionMode,
         customPreloadedJson: [String: Any]?
-    ) {
+    ) async -> Void {
         isInitialized = true
+        await initializeCore(
+            clientToken: ClientToken(token: anonKey),
+            preloadFile: PreloadFile(
+                enabled: false,
+                customJson: nil
+            )
+        )
     }
     
-    func initializeCore() async {
-        client = ThetaClient
+    func initializeCore(clientToken: ClientToken, preloadFile: PreloadFile) async {
+        client = Client(
+            getComponentUseCase: GetComponentUseCase(
+                componentRepository: ComponentRepositoryImpl(
+                    preloadFile: preloadFile,
+                    componentService: ComponentService(
+                        clientToken: clientToken,
+                        httpClient: Session()
+                    ),
+                    isCacheEnabled: false
+                )
+            ),
+            getStylesUseCase: GetStylesUseCase(
+                stylesRepository: StylesRepositoryImpl(
+                    stylesService: StylesService(
+                        clientToken: clientToken,
+                        httpClient: Session()
+                    ),
+                    preloadFile: preloadFile
+                )
+            )
+        )
     }
 
     // Another placeholder function, assuming `Either` is some kind of Result type you're using
-    func build(_ componentName: String) -> Either<Error, Any> {
-        // Call your client's build function or equivalent
-        return Either.right(Any()) // Placeholder
+    func build(_ componentName: String) async throws -> GetComponentResponse {
+        return try await client!.build(
+            componentName: componentName,
+            branchName: nil,
+            preloadAllowed: false
+        )
     }
 
     func dispose() {

@@ -17,6 +17,11 @@ struct StylesRepositoryImpl: StylesRepository {
     }
     
     func getStyles(preloadAllowed: Bool) async throws -> GetStylesResponse {
-        return try await stylesService.fetch(completion: <#T##(Result<GetStylesResponse, Error>) -> Void#>)
+        do {
+            let res = try stylesService.fetch()
+            return res
+        } catch {
+            throw RuntimeError("Error fetching styles")
+        }
     }
 }

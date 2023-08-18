@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import UIKit
+import SwiftUI
 
 struct FSize: Decodable {
     let mobile: String
@@ -19,7 +19,7 @@ struct FSize: Decodable {
         self.desktop = desktop
     }
     
-    func get(device: DeviceType, isWidth: Bool) -> Double? {
+    func get(device: DeviceType, isWidth: Bool, screenSize: CGSize) -> Double? {
         var value: String?
         switch device {
             case .mobile:
@@ -43,9 +43,9 @@ struct FSize: Decodable {
             if value!.contains("%") {
                 let side: Double
                 if isWidth {
-                    side = Double(UIScreen.main.bounds.size.width)
+                    side = screenSize.width
                 } else {
-                    side = Double(UIScreen.main.bounds.size.height)
+                    side = screenSize.height
                 }
                 return Double(side) * (valueDouble / 100)
             }

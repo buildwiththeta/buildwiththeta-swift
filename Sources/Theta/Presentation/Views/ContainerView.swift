@@ -9,19 +9,36 @@ import Foundation
 import SwiftUI
 
 struct ContainerView: View {
-    var child: AnyView
+    var child: AnyView?
     var width: FSize
     var height: FSize
     var padding: FMargins
     var fillColor: FFill
     var borderRadius: FBorderRadius
     // Missing borders and shadows
+    
+    @Environment(\.mainWindowSize) var mainWindowSize
 
     var body: some View {
+        if child == nil {
+            Rectangle()
+        }
         child
             .frame(
-                width: CGFloat(width.get(device: DeviceType.mobile, isWidth: true)!),
-                height: CGFloat(height.get(device: DeviceType.mobile, isWidth: false)!)
+                width: CGFloat(
+                    width.get(
+                        device: DeviceType.mobile,
+                        isWidth: true,
+                        screenSize: mainWindowSize
+                    )!
+                ),
+                height: CGFloat(
+                    height.get(
+                        device: DeviceType.mobile,
+                        isWidth: false,
+                        screenSize: mainWindowSize
+                    )!
+                )
             )
             .padding(padding.get(device: DeviceType.mobile))
             .background(

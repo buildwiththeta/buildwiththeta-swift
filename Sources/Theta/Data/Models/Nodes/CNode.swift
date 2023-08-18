@@ -85,7 +85,38 @@ class CNode: Identifiable, Equatable {
     }
     
     func getView() -> some View {
-        return EmptyForTestingView()
+        switch (type) {
+        case "container":
+            return ContainerView(
+                child: child?.getView(),
+                width: attributes.width!,
+                height: attributes.height!,
+                padding: attributes.padding!,
+                fillColor: attributes.fill!,
+                borderRadius: attributes.borderRadius!
+            )
+        case "text":
+            break;
+        case "image":
+            break;
+        case "column":
+            return ColumnView(
+                mainAxisAlignment: attributes.mainAxisAlignment!,
+                crossAxisAlignment: attributes.crossAxisAlignment!,
+                children: children
+            )
+        case "row":
+            return RowView(
+                mainAxisAlignment: attributes.mainAxisAlignment!,
+                crossAxisAlignment: attributes.crossAxisAlignment!,
+                children: children
+            )
+        case "spacer":
+            return Spacer()
+            break;
+        default:
+            return Rectangle()
+        }
     }
     
     func copyWith(

@@ -18,7 +18,7 @@ class StylesService {
         self.httpClient = httpClient
     }
     
-    func fetch(completion: @escaping (Result<GetStylesResponse, Error>) -> Void) {
+    func fetch() throws -> GetStylesResponse {
         let url = "\(AppStrings.baseUrl)\(AppStrings.getStylesPath)"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(clientToken.token)",
@@ -29,21 +29,34 @@ class StylesService {
             "log": [:],
         ]
         
+        let semaphore = DispatchSemaphore(value: 0)
+        var result: Result<GetStylesResponse, Error>!
+        
         httpClient.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers).responseJSON { response in
             switch response.result {
             case .success(let value):
-                let json = JSON(value)
                 do {
-                    let stylesResponse = try GetStylesResponse(json: json)
-                    completion(.success(stylesResponse))
+                    let getStylesResponse = try GetStylesResponse(json: JSON(value))
+                    result = .success(getStylesResponse)
                 } catch {
-                    completion(.failure(error))
+                    result = .failure(error)
                 }
-                
-            case .failure(let error):
+            case .failure:
                 let message = "Error fetching component, code: \(response.response?.statusCode ?? 0), message: \(response.data)"
-                completion(.failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: message])))
+                result = .failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: message]))
             }
+            semaphore.signal()
+        }
+        
+        semaphore.wait()
+        
+        switch result {
+        case .success(let response):
+            return response
+        case .failure(let error):
+            throw error
+        case .none:
+            throw RuntimeError("none")
         }
     }
 }

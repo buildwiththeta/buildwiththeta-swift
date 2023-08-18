@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import UIKit
+import SwiftUI
 
 struct FFontSize: Decodable {
     let mobile: Double
