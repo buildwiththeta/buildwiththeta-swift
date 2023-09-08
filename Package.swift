@@ -1,7 +1,6 @@
 // swift-tools-version: 5.8
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
-import Foundation
 import PackageDescription
 
 let package = Package(
@@ -39,7 +38,7 @@ let package = Package(
             name: "ThetaTests",
             dependencies: ["Theta"],
             sources: [
-                "ThetaTests.swift",
+                "ThetaTests.swift"
             ]
         )
     ]
